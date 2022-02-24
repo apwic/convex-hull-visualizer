@@ -1,0 +1,6 @@
+# pycache folder
+.__pycache__/
+# pycache
+*.pyc
+# temp code runner file
+tempCodeRunner.py
