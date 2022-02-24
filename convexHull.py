@@ -45,8 +45,7 @@ def pointDistanceMax(S, P1, Pn):
 
     return pointMaxD;
 
-# recursive convex searcher for S1
-def splittedConvexS1(S, P1, Pn):
+def splittedConvex(S, P1, Pn, pivot):
     if (len(S) == 0):
         # there's no point in S, then P1 and Pn is convexPoint
         convexPoint.append([np.array([P1[0], Pn[0]]), np.array([P1[1], Pn[1]])])
@@ -58,51 +57,32 @@ def splittedConvexS1(S, P1, Pn):
         # define S1 and S2
         S1 = []
         S2 = []
+        # split to S1 and S2
         for i in S:
-            # split to S1 and S2
-            # check if point outside of the triangle of P1, pointMaxD, and Pn
+            # if pivot is -1 then it is upside down of the original function, so multiply with -1 so that the function
+            # will work properly
+            if (pivot == -1):
+                dir = -1;
+            else:
+                dir = 1;
+
+            # check if point outside of the left triangle of P1, pointMaxD, and Pn
             if (pointMaxD[0] > i[0]):
-                dir = determinantBetweenPoint(pointMaxD, P1, i)
+                dir *= determinantBetweenPoint(pointMaxD, P1, i)
+
                 if (dir < 0):
                     S1.append(i)
             
-            #check if point outside of the triangle of P1, pointMaxD, and Pn
+            #check if point outside of the right triangle of P1, pointMaxD, and Pn
             elif (pointMaxD[0] < i[0]):
-                dir = determinantBetweenPoint(Pn, pointMaxD, i)
+                dir *= determinantBetweenPoint(Pn, pointMaxD, i)
+
                 if (dir < 0):
                     S2.append(i)
 
-        splittedConvexS1(S1, P1, pointMaxD);
-        splittedConvexS1(S2, pointMaxD, Pn);
+        splittedConvex(S1, P1, pointMaxD, pivot);
+        splittedConvex(S2, pointMaxD, Pn, pivot);
 
-# recursive convex searcher for S2
-def splittedConvexS2(S, P1, Pn):
-    if (len(S) == 0):
-        # there's no point in S, then P1 and Pn is convexPoint
-        convexPoint.append([np.array([P1[0], Pn[0]]), np.array([P1[1], Pn[1]])])
-
-    else:
-        # find the max distance between point in S to the line between P1 and Pn
-        pointMaxD = pointDistanceMax(S, P1, Pn)
-
-        # define S1 and S2
-        S1 = []
-        S2 = []
-        for i in S:
-            # check if point outside of the triangle of P1, pointMaxD, and Pn
-            if (pointMaxD[0] < i[0]):
-                dir = determinantBetweenPoint(P1, pointMaxD, i)
-                if (dir > 0):
-                    S1.append(i)
-            
-            #check if point outside of the triangle of P1, pointMaxD, and Pn
-            elif (pointMaxD[0] > i[0]):
-                dir = determinantBetweenPoint(pointMaxD, Pn, i)
-                if (dir > 0):
-                    S2.append(i)
-
-        splittedConvexS2(S1, P1, pointMaxD);
-        splittedConvexS2(S2, pointMaxD, Pn);
 
 def convexHull(listOfPoint):
     # initialize convexPoint
@@ -129,8 +109,6 @@ def convexHull(listOfPoint):
             S2.append(i)
 
     # divide and conquer for S1 and S2
-    # there's a different between S1 and S2 because of the direction
-    # so for now, the recursive will be split into two function
-    splittedConvexS1(S1, P1, Pn)
-    splittedConvexS2(S2, Pn, P1)
+    splittedConvex(S1, P1, Pn, 1)
+    splittedConvex(S2, P1, Pn, -1)
     return convexPoint
