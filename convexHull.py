@@ -1,15 +1,6 @@
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-from IPython.display import display
-from scipy.spatial import ConvexHull
-from sklearn import datasets
-from convexHull import *
-# import numpy as np
-# initialize convexPoint
-global convexPoint
-convexPoint = []
 
+# find the angle between three point (return in degrees)
 def findAngle(a, b, c):
     ba = a - b
     bc = c - b
@@ -19,6 +10,10 @@ def findAngle(a, b, c):
 
     return np.degrees(angle)
 
+# find the determinant between three point
+# if > 0 then it is left/upper from p1 and p2
+# if = 0 then it is in p1 and p2
+# if < 0 then it is right/below from p1 and p2
 def determinantBetweenPoint(p1, p2, p3):
     x1 = p1[0]
     y1 = p1[1]
@@ -28,6 +23,8 @@ def determinantBetweenPoint(p1, p2, p3):
     y3 = p3[1]
     return x1*y2 + x3*y1 + x2*y3 - x3*y2 - x2*y1 - x1*y3
 
+# find the furthest point from  a line (P1, pn) to a point from array S
+# if the distance is the same then maximize the angle
 def pointDistanceMax(S, P1, Pn):
     maxD = 0
     pointMaxD = []
@@ -48,10 +45,10 @@ def pointDistanceMax(S, P1, Pn):
 
     return pointMaxD;
 
+# recursive convex searcher for S1
 def splittedConvexS1(S, P1, Pn):
     if (len(S) == 0):
         # there's no point in S, then P1 and Pn is convexPoint
-        # if ((convexPoint[:] == [P1, P1]).any()):
         convexPoint.append([np.array([P1[0], Pn[0]]), np.array([P1[1], Pn[1]])])
 
     else:
@@ -62,13 +59,6 @@ def splittedConvexS1(S, P1, Pn):
         S1 = []
         S2 = []
         for i in S:
-            # dir1 = determinantBetweenPoint(P1, pointMaxD, i)
-            # dir2 = determinantBetweenPoint(pointMaxD, Pn, i)
-            # if (dir1 > 0 and dir2 < 0):
-            #     S1.append(i)
-            # elif (dir1 < 0 and dir2 > 0):
-            #     S2.append(i)
-
             # split to S1 and S2
             # check if point outside of the triangle of P1, pointMaxD, and Pn
             if (pointMaxD[0] > i[0]):
@@ -85,10 +75,10 @@ def splittedConvexS1(S, P1, Pn):
         splittedConvexS1(S1, P1, pointMaxD);
         splittedConvexS1(S2, pointMaxD, Pn);
 
+# recursive convex searcher for S2
 def splittedConvexS2(S, P1, Pn):
     if (len(S) == 0):
         # there's no point in S, then P1 and Pn is convexPoint
-        # if ((convexPoint[:] == [P1, P1]).any()):
         convexPoint.append([np.array([P1[0], Pn[0]]), np.array([P1[1], Pn[1]])])
 
     else:
@@ -99,14 +89,6 @@ def splittedConvexS2(S, P1, Pn):
         S1 = []
         S2 = []
         for i in S:
-            # dir1 = determinantBetweenPoint(P1, pointMaxD, i)
-            # dir2 = determinantBetweenPoint(pointMaxD, Pn, i)
-            # if (dir1 > 0 and dir2 < 0):
-            #     S1.append(i)
-            # elif (dir1 < 0 and dir2 > 0):
-            #     S2.append(i)
-
-            # split to S1 and S2
             # check if point outside of the triangle of P1, pointMaxD, and Pn
             if (pointMaxD[0] < i[0]):
                 dir = determinantBetweenPoint(P1, pointMaxD, i)
@@ -123,6 +105,9 @@ def splittedConvexS2(S, P1, Pn):
         splittedConvexS2(S2, pointMaxD, Pn);
 
 def convexHull(listOfPoint):
+    # initialize convexPoint
+    global convexPoint
+    convexPoint = []
 
     # sort array by the absis
     listOfPoint = listOfPoint[listOfPoint[:,1].argsort(kind='mergesort')]
@@ -144,47 +129,8 @@ def convexHull(listOfPoint):
             S2.append(i)
 
     # divide and conquer for S1 and S2
+    # there's a different between S1 and S2 because of the direction
+    # so for now, the recursive will be split into two function
     splittedConvexS1(S1, P1, Pn)
     splittedConvexS2(S2, Pn, P1)
     return convexPoint
-
-#______________________________________________________________________________________________________________________
-if __name__ == "__main__":
-    data = datasets.load_iris()
-
-    df = pd.DataFrame(data.data, columns= data.feature_names)
-    df['Target'] = pd.DataFrame(data.target)
-    df.round(decimals = 1)
-    # display(df[:50])
-    plt.figure(figsize = (10,6))
-    colors = ['b', 'r', 'g']
-    plt.title('Petal Width vs Petal Length')
-    plt.xlabel(data.feature_names[0])
-    plt.ylabel(data.feature_names[1])
-
-    bucket = df[df['Target'] == 0]
-    # take all of the point (nested array)
-    bucket = bucket.iloc[:, [0, 1]].values
-    # print(bucket)
-    # use convexhull
-    hull = ConvexHull(bucket)
-    # print(myHull[:][0])
-    print("---------------------------------------------------------------")
-
-    plt.scatter(bucket[:, 0], bucket[:, 1], label = data.target_names[0])
-
-    # hull simplices is meant to take nested array from the method
-    for simplex in hull.simplices:
-        # plot each point to create a convex hull
-        print(bucket[simplex, 0], bucket[simplex, 1])
-        # plt.plot(bucket[simplex, 0], bucket[simplex, 1], colors[0])
-    print("---------------------------------------------------------------")
-
-    myHull = convexHull(bucket)
-    print("---------------------------------------------------------------")
-    # plt.plot(myHull[-6][0], myHull[0][0], colors[0])
-    for j in range(len(myHull)):
-        print(myHull[j][0], myHull[j][1])
-        plt.plot(myHull[j][0], myHull[j][1], colors[0])
-
-    plt.show()
