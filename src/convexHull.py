@@ -61,8 +61,8 @@ def splittedConvex(S, P1, Pn, pivot):
         S2 = []
         # split to S1 and S2
         for i in S:
-            # if pivot is -1 then it is upside down of the original function, so multiply with -1 so that the function
-            # will work properly
+            # if pivot is -1 then it is upside down of the original function 
+            # multiply with -1 so that the function will work properly
             if (pivot == -1):
                 dir = -1
             else:

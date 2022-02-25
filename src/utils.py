@@ -12,8 +12,8 @@ def showConvexFromTable(df, column1, column2, colors):
     # create plot
     plt.title(df.columns[column1] +
               " vs " + df.columns[column2])
-    plt.xlabel(df.columns[column1] )
-    plt.ylabel(df.columns[column2] )
+    plt.xlabel(df.columns[column1])
+    plt.ylabel(df.columns[column2])
 
     # take the value from specified column
     bucket = df.iloc[:, [column1, column2]].values
@@ -26,11 +26,11 @@ def showConvexFromTable(df, column1, column2, colors):
     for i in range(len(hull)):
         plt.plot(hull[i][0], hull[i][1], colors)
 
-    plt.legend()
     plt.show()
 
-# use case for linear separability dataset 
+# use case for linear separability dataset
 def linearSepDataSet(df, column1, column2):
+    # create plot
     plt.figure(figsize=(10, 6))
     colors = colorList
     plt.title(df.columns[column1] +
@@ -42,17 +42,21 @@ def linearSepDataSet(df, column1, column2):
     for i in range(len(target)):
         bucket = df[df['Target'] == target[i]]
         bucket = bucket.iloc[:, [column1, column2]].values
+        # use convex at each target
         myHull = convexHull(bucket)
 
-        plt.scatter(bucket[:, 0], bucket[:, 1], label=target[i], color=colors[i])
+        # scatter and plot colors
+        plt.scatter(bucket[:, 0], bucket[:, 1],
+                    label=target[i], color=colors[i])
 
+        # plot convex point
         for j in range(len(myHull)):
             plt.plot(myHull[j][0], myHull[j][1], colors[i])
 
     plt.legend()
     plt.show()
-    
-# load datasets 
+
+# load datasets
 def loadDatasets():
     iris = datasets.load_iris()
     wine = datasets.load_wine()
@@ -83,7 +87,6 @@ def providedDataSets():
     # used datasets
     dsName, dsArray = loadDatasets()
 
-    # main program
     print("List of database: ")
     for i in range(len(dsName)):
         print(f"{i+1}. {dsName[i]}")
@@ -116,7 +119,7 @@ def inputDataSets():
 
     # check for file
     try:
-        df = pd.read_csv(filePath) 
+        df = pd.read_csv(filePath)
     except:
         print("File not found")
         inputDataSets()
