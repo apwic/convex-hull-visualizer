@@ -36,19 +36,21 @@ def pointDistanceMax(S, P1, Pn):
 
         elif (d == maxD):
             # maximize the angle if distance is the same
-            dAngle = findAngle(P1,i, Pn)
+            dAngle = findAngle(P1, i, Pn)
             maxDAngle = findAngle(P1, pointMaxD, Pn)
 
             if (dAngle > maxDAngle):
                 maxD = d
                 pointMaxD = i
 
-    return pointMaxD;
+    return pointMaxD
+
 
 def splittedConvex(S, P1, Pn, pivot):
     if (len(S) == 0):
         # there's no point in S, then P1 and Pn is convexPoint
-        convexPoint.append([np.array([P1[0], Pn[0]]), np.array([P1[1], Pn[1]])])
+        convexPoint.append(
+            [np.array([P1[0], Pn[0]]), np.array([P1[1], Pn[1]])])
 
     else:
         # find the max distance between point in S to the line between P1 and Pn
@@ -62,9 +64,9 @@ def splittedConvex(S, P1, Pn, pivot):
             # if pivot is -1 then it is upside down of the original function, so multiply with -1 so that the function
             # will work properly
             if (pivot == -1):
-                dir = -1;
+                dir = -1
             else:
-                dir = 1;
+                dir = 1
 
             # check if point outside of the left triangle of P1, pointMaxD, and Pn
             if (pointMaxD[0] > i[0]):
@@ -72,16 +74,16 @@ def splittedConvex(S, P1, Pn, pivot):
 
                 if (dir < 0):
                     S1.append(i)
-            
-            #check if point outside of the right triangle of P1, pointMaxD, and Pn
+
+            # check if point outside of the right triangle of P1, pointMaxD, and Pn
             elif (pointMaxD[0] < i[0]):
                 dir *= determinantBetweenPoint(Pn, pointMaxD, i)
 
                 if (dir < 0):
                     S2.append(i)
 
-        splittedConvex(S1, P1, pointMaxD, pivot);
-        splittedConvex(S2, pointMaxD, Pn, pivot);
+        splittedConvex(S1, P1, pointMaxD, pivot)
+        splittedConvex(S2, pointMaxD, Pn, pivot)
 
 
 def convexHull(listOfPoint):
@@ -90,8 +92,8 @@ def convexHull(listOfPoint):
     convexPoint = []
 
     # sort array by the absis
-    listOfPoint = listOfPoint[listOfPoint[:,1].argsort(kind='mergesort')]
-    listOfPoint = listOfPoint[listOfPoint[:,0].argsort(kind='mergesort')]
+    listOfPoint = listOfPoint[listOfPoint[:, 1].argsort(kind='mergesort')]
+    listOfPoint = listOfPoint[listOfPoint[:, 0].argsort(kind='mergesort')]
     # take the minimum of absis as P1
     P1 = listOfPoint[0]
     # take the maximum of absis as Pn
