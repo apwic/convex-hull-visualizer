@@ -1,4 +1,4 @@
-# Convex Hull Searcher untuk Visualisasi Tes Linear Separability Dataset
+# Convex Hull Visualizer untuk Visualisasi Tes Linear Separability Dataset
 > Tugas Kecil Mata Kuliah IF2211 Strategi Algoritma ITB.
 
 ## Table of Contents
