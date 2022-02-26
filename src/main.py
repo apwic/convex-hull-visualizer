@@ -1,9 +1,8 @@
-import pandas as pd
 from convexHull import *
 from utils import *
 from random import randint
 
-colorList = ['b', 'r', 'g', 'c', 'm', 'y', 'k']
+colorList = ['tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'b', 'r', 'g', 'c', 'm', 'y', 'k']
 
 if __name__ == "__main__":
     # ask for whether using external file or load from provided datasets
@@ -20,7 +19,6 @@ if __name__ == "__main__":
         # some datasets might not use integer as their target
         # so it's better to use the original name from dataset
         df['Target'] = df.iloc[:, -1]
-
     else:
         data, X, Y = providedDataSets()
         df = pd.DataFrame(data.data, columns=data.feature_names)
@@ -40,7 +38,6 @@ if __name__ == "__main__":
         plt.clf()
         color = randint(0, len(colorList)-1)
         color = colorList[color]
-        print(color)
 
         print("\nCant use categorized convex")
         print("Will take all point to create convex hull")

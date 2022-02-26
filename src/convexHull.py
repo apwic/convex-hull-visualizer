@@ -1,7 +1,9 @@
 import numpy as np
 
-# find the angle between three point (return in degrees)
 def findAngle(a, b, c):
+    """
+    find the angle between three point (return in degrees)
+    """
     ba = a - b
     bc = c - b
 
@@ -10,11 +12,13 @@ def findAngle(a, b, c):
 
     return np.degrees(angle)
 
-# find the determinant between three point
-# if > 0 then it is left/upper from p1 and p2
-# if = 0 then it is in p1 and p2
-# if < 0 then it is right/below from p1 and p2
 def determinantBetweenPoint(p1, p2, p3):
+    """
+    find the determinant between three point
+    if > 0 then it is left/upper from p1 and p2
+    if = 0 then it is in p1 and p2
+    if < 0 then it is right/below from p1 and p2
+    """
     x1 = p1[0]
     y1 = p1[1]
     x2 = p2[0]
@@ -23,9 +27,11 @@ def determinantBetweenPoint(p1, p2, p3):
     y3 = p3[1]
     return x1*y2 + x3*y1 + x2*y3 - x3*y2 - x2*y1 - x1*y3
 
-# find the furthest point from  a line (P1, pn) to a point from array S
-# if the distance is the same then maximize the angle
 def pointDistanceMax(S, P1, Pn):
+    """
+    find the furthest point from  a line (P1, pn) to a point from array S
+    if the distance is the same then maximize the angle
+    """
     maxD = 0
     pointMaxD = []
     for i in S:
@@ -47,10 +53,21 @@ def pointDistanceMax(S, P1, Pn):
 
 
 def splittedConvex(S, P1, Pn, pivot):
+    """
+    divide and conquer algorithm using quickHull
+    """
     if (len(S) == 0):
         # there's no point in S, then P1 and Pn is convexPoint
         convexPoint.append(
             [np.array([P1[0], Pn[0]]), np.array([P1[1], Pn[1]])])
+
+    # edge case for only one point in S
+    elif (len(S) == 1):
+        pMax = S[0]
+        convexPoint.append(
+            [np.array([P1[0], pMax[0]]), np.array([P1[1], pMax[1]])])
+        convexPoint.append(
+            [np.array([pMax[0], Pn[0]]), np.array([pMax[1], Pn[1]])])
 
     else:
         # find the max distance between point in S to the line between P1 and Pn
@@ -87,6 +104,9 @@ def splittedConvex(S, P1, Pn, pivot):
 
 
 def convexHull(listOfPoint):
+    """
+    main function from convex hull
+    """
     # initialize convexPoint
     global convexPoint
     convexPoint = []

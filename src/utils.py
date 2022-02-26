@@ -1,15 +1,17 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import os
 from sklearn import datasets
 from convexHull import *
 from pathlib import Path
 
-colorList = ['b', 'r', 'g', 'c', 'm', 'y', 'k']
+colorList = ['tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'b', 'r', 'g', 'c', 'm', 'y', 'k']
 
-# generalized convex from any dataset
 def showConvexFromTable(df, column1, column2, colors):
+    """
+    generalized convex from any dataset
+    """
     # create plot
+    plt.figure(num="Convex Hull", figsize=(10, 6))
     plt.title(df.columns[column1] +
               " vs " + df.columns[column2])
     plt.xlabel(df.columns[column1])
@@ -28,15 +30,17 @@ def showConvexFromTable(df, column1, column2, colors):
 
     plt.show()
 
-# use case for linear separability dataset
 def linearSepDataSet(df, column1, column2):
+    """
+    use case for linear separability dataset
+    """
     # create plot
-    plt.figure(figsize=(10, 6))
+    plt.figure(num="Convex Hull", figsize=(10, 6))
     colors = colorList
     plt.title(df.columns[column1] +
               " vs " + df.columns[column2])
     plt.xlabel(df.columns[column1])
-    plt.ylabel(df.columns[column1])
+    plt.ylabel(df.columns[column2])
     target = df.Target.unique()
 
     for i in range(len(target)):
@@ -47,17 +51,19 @@ def linearSepDataSet(df, column1, column2):
 
         # scatter and plot colors
         plt.scatter(bucket[:, 0], bucket[:, 1],
-                    label=target[i], color=colors[i])
+                    label=target[i], color=(colors[i%len(colors)]))
 
         # plot convex point
         for j in range(len(myHull)):
-            plt.plot(myHull[j][0], myHull[j][1], colors[i])
+            plt.plot(myHull[j][0], myHull[j][1], colors[i%len(colors)])
 
     plt.legend()
     plt.show()
 
-# load datasets
 def loadDatasets():
+    """
+    load datasets from sklearn
+    """
     iris = datasets.load_iris()
     wine = datasets.load_wine()
     breastCancer = datasets.load_breast_cancer()
@@ -68,8 +74,10 @@ def loadDatasets():
 
     return dsName, datasetsArray
 
-# check if input is a number and is in range of array's length
 def checkInput(var, arr):
+    """
+    check if input is a number and is in range of array's length
+    """
     # check whether the input is a number
     while (not var.isnumeric()):
         var = input(f"Wrong input, choose a number 1-{len(arr)}: ")
@@ -82,8 +90,10 @@ def checkInput(var, arr):
 
     return var
 
-# provided data sets
 def providedDataSets():
+    """
+    ask user for input from the provided data sets
+    """
     # used datasets
     dsName, dsArray = loadDatasets()
 
@@ -111,8 +121,10 @@ def providedDataSets():
 
     return dsArray[dsUsed-1], X, Y
 
-# input data sets
 def inputDataSets():
+    """
+    ask user for input from external file
+    """
     # get file path and redirect it to test folder
     filePath = input("Input file name: ")
     filePath = str(Path(__file__).resolve().parent) + "/../test/" + filePath
@@ -127,7 +139,7 @@ def inputDataSets():
     # ask user for X and Y
     column = df.columns
     print("List of column: ")
-    for i in range(len(column)):
+    for i in range(len(column)-1):
         print(f"{i+1}. {column[i]}")
 
     X = input(f"Choose a column for X value (1-{len(column)}): ")
