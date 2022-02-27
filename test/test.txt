@@ -1,0 +1,9 @@
+List dataset yang diuji:
+a. Provided Dataset:
+    1. Iris
+    2. Wine
+    3. Breast Cancer
+b. File Eksternal:
+    1. heart.csv
+    2. banknote.csv
+    3. indiansdiabetes.csv
