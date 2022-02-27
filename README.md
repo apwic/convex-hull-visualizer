@@ -34,8 +34,18 @@ Program ini dapat menerima dataset lalu melakukan visualisasi Tes Linear Separab
 ## Setup
 - Pastikan sudah dilakukan clone atau _download_ terhadap repository ini
 - Buka folder repository ini pada terminal
+- Disarankan menggunakan virtualenv, Install terlebih dahulu virtualenv dengan _command_ pada terminal:
 ```
-pip install -r requirements.txt
+pip3 install virtualenv
+virtualenv src
+```
+- virtualenv untuk folder src akan terbuat dan untuk mengaktifkannya lakukan _command_ pada terminal:
+```
+src\Scripts\activate
+```
+- Setelah virtualenv aktif, lakukan peng-_install_-an pada modul dengan melakukan _command_ pada terminal:
+```
+pip3 install -r requirements.txt
 ```
 - _Command_ tersebut akan melakukan install terhadap _library_ yang dibutuhkan untuk menjalankan program
 - Jika ingin menggunakan file csv tambahan silahkan tambahkan file csv tersebut ke folder test
@@ -43,10 +53,16 @@ pip install -r requirements.txt
 ## Usage
 - Pastikan sudah dilakukan clone atau _download_ terhadap repository ini
 - Buka folder repository ini pada terminal
+- Aktifkan virtualenv dan jalankan program yang sudah dibuat dengan cara lakukan _command_ pada terminal:
 ```
+src\Scripts\activate
 python src\main.py
 ```
-- Program akan berjalan dan silahkan masukkan input sesuai yang diminta oleh program <br/>
+- Program akan berjalan dan silahkan masukkan input sesuai yang diminta oleh program
+- Setelah selesai menggunakan program, matikan virtualenv dengan _command_ pada terminal:
+```
+deactivate
+```
 
 
 ## Project Status
